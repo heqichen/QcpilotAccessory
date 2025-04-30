@@ -1,24 +1,5 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - Basic window
-*
-*   Welcome to raylib!
-*
-*   To test examples, just press Shift+F10 for Android Studio.
-*
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
-*   BSD-like license that allows static linking with closed source software
-*
-*   Copyright (c) 2013-2023 Ramon Santamaria (@raysan5) and reviewed by Victor Le Juez
-*
-********************************************************************************************/
-
 #include "raymob.h" // This header can replace 'raylib.h' and includes additional functions related to Android.
-
+#include <cstdio>
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -42,9 +23,15 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(BROWN);
 
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        char buffer[256];
+        int screenHeight = GetScreenHeight();
+        int screenWidth = GetScreenWidth();
+        std::sprintf(buffer, "Screen size: %d x %d", screenWidth, screenHeight);
+
+
+        DrawText(buffer, 190, 200, 200, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
