@@ -31,7 +31,7 @@ int main(void)
         std::sprintf(buffer, "Screen size: %d x %d", screenWidth, screenHeight);
 
 
-        DrawText(buffer, 190, 200, 200, LIGHTGRAY);
+        DrawText(buffer, 190, 200, 80, LIGHTGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
