@@ -1,5 +1,13 @@
+#define RAYGUI_NO_ICONS
+
 #include "raymob.h" // This header can replace 'raylib.h' and includes additional functions related to Android.
 #include <cstdio>
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
+static int count = 0;
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -28,10 +36,14 @@ int main(void)
         char buffer[256];
         int screenHeight = GetScreenHeight();
         int screenWidth = GetScreenWidth();
-        std::sprintf(buffer, "Screen size: %d x %d", screenWidth, screenHeight);
+        std::sprintf(buffer, "Screen size: %d x %d @ %d", screenWidth, screenHeight, count);
 
 
         DrawText(buffer, 190, 200, 80, LIGHTGRAY);
+
+        if (GuiButton((Rectangle) { 20, 100, 200, 80 }, "Button 2")) {
+            count++;
+        }
 
         EndDrawing();
         //----------------------------------------------------------------------------------
