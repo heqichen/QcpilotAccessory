@@ -2,6 +2,8 @@
 
 #include "raymob.h" // This header can replace 'raylib.h' and includes additional functions related to Android.
 #include <cstdio>
+#include <jni.h>
+#include <qcpilot/adaptor.h>
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -42,7 +44,7 @@ int main(void)
         DrawText(buffer, 190, 200, 80, LIGHTGRAY);
 
         if (GuiButton((Rectangle) { 20, 100, 200, 80 }, "Button 2")) {
-            count++;
+            count = foo();
         }
 
         EndDrawing();

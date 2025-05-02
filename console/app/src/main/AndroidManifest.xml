@@ -17,6 +17,8 @@
 
     <uses-feature android:name="android.hardware.sensor.accelerometer"
         android:required="${REQUIRE_ACCELEROMETER}" />
+<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+
 
     <!-- Application config -->
 

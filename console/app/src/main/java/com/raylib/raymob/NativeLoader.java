@@ -27,11 +27,13 @@ package com.raylib.raymob;  // Don't change the package name (see gradle.propert
 import android.app.NativeActivity;
 import android.view.KeyEvent;
 import android.os.Bundle;
+import com.cooboc.qcpilot.Facade;
 
 public class NativeLoader extends NativeActivity {
 
     public DisplayManager displayManager;
     public SoftKeyboard softKeyboard;
+    public Facade facade;
     public boolean initCallback = false;
 
     // Loading method of your native application
@@ -40,6 +42,7 @@ public class NativeLoader extends NativeActivity {
         super.onCreate(savedInstanceState);
         displayManager = new DisplayManager(this);
         softKeyboard = new SoftKeyboard(this);
+        facade = new Facade();
         System.loadLibrary("raymob");   // Load your game library (don't change raymob, see gradle.properties)
     }
 
