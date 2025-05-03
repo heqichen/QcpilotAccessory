@@ -9,6 +9,7 @@
 #include "raygui.h"
 
 static int count = 0;
+char * recv = nullptr;
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -35,17 +36,19 @@ int main(void)
 
         ClearBackground(BROWN);
 
+
+
+
+
+        if (GuiButton((Rectangle) { 200, 300, 200, 80 }, "Button 2")) {
+            recv = foo();
+        }
+
         char buffer[256];
         int screenHeight = GetScreenHeight();
         int screenWidth = GetScreenWidth();
-        std::sprintf(buffer, "Screen size: %d x %d @ %d", screenWidth, screenHeight, count);
-
-
+        std::sprintf(buffer, "Screen size: %d x %d @ %d : %s", screenWidth, screenHeight, count, recv);
         DrawText(buffer, 190, 200, 80, LIGHTGRAY);
-
-        if (GuiButton((Rectangle) { 20, 100, 200, 80 }, "Button 2")) {
-            count = foo();
-        }
 
         EndDrawing();
         //----------------------------------------------------------------------------------

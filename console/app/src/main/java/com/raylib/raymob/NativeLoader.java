@@ -25,9 +25,15 @@
 package com.raylib.raymob;  // Don't change the package name (see gradle.properties)
 
 import android.app.NativeActivity;
+import android.content.Context;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.os.Bundle;
 import com.cooboc.qcpilot.Facade;
+
+
 
 public class NativeLoader extends NativeActivity {
 
@@ -36,14 +42,37 @@ public class NativeLoader extends NativeActivity {
     public Facade facade;
     public boolean initCallback = false;
 
+    private WifiManager.MulticastLock mlock_;
+
     // Loading method of your native application
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /* Turn off multicast filter */
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        if (wifi != null){
+            WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
+            lock.setReferenceCounted(true);
+            lock.acquire();
+            boolean isLockHeld = lock.isHeld();
+            if (isLockHeld) {
+                Log.e("QC", "wifi locked");
+            } else {
+                Log.e("QC", "wifi acquire lock failed");
+            }
+        } else {
+            Log.e("QC", "No wifi");
+        }
+
+
         displayManager = new DisplayManager(this);
         softKeyboard = new SoftKeyboard(this);
-        facade = new Facade();
+
         System.loadLibrary("raymob");   // Load your game library (don't change raymob, see gradle.properties)
+        
+        facade = new Facade();
+
+
     }
 
     // Handling loss and regain of application focus

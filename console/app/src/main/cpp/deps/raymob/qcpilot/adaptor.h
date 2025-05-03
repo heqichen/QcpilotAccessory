@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-int foo();
+char * foo();
 
 #ifdef __cplusplus
 }
