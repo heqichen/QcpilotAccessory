@@ -19,13 +19,8 @@ public class Facade {
         toohs.init();
     }
 
-
     public byte[] fun() {
-        Log.e("QC", "call fun()");
         return toohs.recv();
-        // mock();
-        // this.c += 5;
-        // return this.c;
     }
 
     private void mock() {

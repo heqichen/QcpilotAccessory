@@ -2,11 +2,18 @@
 #ifndef QCPILOTCONSOLE_QCPILOT_ADAPTOR_H
 #define QCPILOTCONSOLE_QCPILOT_ADAPTOR_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-char * foo();
+
+
+
+void readPacket();
+uint8_t *getBuffer();
+size_t  getBufferSize();
 
 #ifdef __cplusplus
 }

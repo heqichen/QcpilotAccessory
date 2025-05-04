@@ -10,60 +10,81 @@ import java.net.MulticastSocket;
 import java.nio.charset.StandardCharsets;
 
 public class Toohs {
+    private class Worker implements Runnable {
 
-    private  InetAddress group_;
-    private MulticastSocket socket_;
+        private byte[] buffer_ = null;
 
-    public Toohs() {
-
-    }
-    public void init() {
-        Log.e("QC", "init the shott");
-        try {
-            this.group_ = InetAddress.getByName("239.238.237.236");
-            this.socket_ = new MulticastSocket(1900);
-            this.socket_.setLoopbackMode(false);
-            this.socket_.joinGroup(this.group_);
-
-            Log.e("QC", "join group OK");
-            int beforeTimeout = this.socket_.getSoTimeout();
-            this.socket_.setSoTimeout(500);
-            int afterTimeout = this.socket_.getSoTimeout();
-            Log.e("QC", "timeout: " + String.valueOf(beforeTimeout) + " " +String.valueOf(afterTimeout));
-        } catch (Exception e) {
-            this.group_ = null;
-            this.socket_ = null;
-            Log.e("QC", "join group failed", e);
+        public Worker() {
+            this.buffer_ = new byte[0];
         }
+
+        @Override
+        public void run() {
+            InetAddress inetGroup;
+            MulticastSocket socket;
+            Log.e("QC", "init the UDP multicast");
+            try {
+                inetGroup = InetAddress.getByName("239.238.237.236");
+                socket = new MulticastSocket(1900);
+                socket.setLoopbackMode(false);
+                socket.joinGroup(inetGroup);
+                // socket.setSoTimeout(50);
+            } catch (Exception e) {
+                inetGroup = null;
+                socket = null;
+                Log.e("QC", "join group failed", e);
+            }
+            while (true) {
+                // receive data
+                byte[] buf = new byte[1024];
+                if ((inetGroup == null) || (socket == null)) {
+                    Log.e("QC", "init socket failed, cannot receive");
+                } else {
+                    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                    try {
+                        socket.receive(packet);
+                        synchronized (this) {
+                            // copy data
+                            this.buffer_ = new byte[packet.getLength()];
+                            for (int i=0; i< packet.getLength(); ++i) {
+                                this.buffer_[i] = buf[i];
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("QC", "Read socket error", e);
+                    }
+                }
+            }
+        }
+
+        public byte[] getPacket() {
+            byte[] ret = null;
+            synchronized(this) {
+                ret = this.buffer_;
+            }
+            return ret;
+
+        }
+    }
+
+    private Worker worker_;
+    public Toohs() {
+        this.worker_ = new Worker();
+    }
+
+    public void init() {
+
+        Thread t = new Thread(this.worker_);
+        t.start();
     }
 
     public byte[] recv() {
-        byte[] buf = new byte[1024];
-        Log.d("QC", "start receive");
-        if ((this.group_ == null) || (this.socket_ == null)) {
-            Log.e("QC", "init socket failed, cannot receive");
-        } else {
-
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            try {
-                Log.e("QC", "before receive");
-                this.socket_.receive(packet);
-                Log.e("QC", "after receive: " + String.valueOf(packet.getLength()));
-            } catch (Exception e) {
-                Log.e("QC", "Read socket error", e);
-            }
-        }
-        return buf;
+        return this.worker_.getPacket();
     }
 
 
+    public void destroy() {
 
-    public void destroy () {
-        if ((this.socket_ != null) && (this.group_ != null)) {
-            try {
-                this.socket_.leaveGroup(this.group_);
-            } catch (Exception e){}
-        }
 
     }
 }
