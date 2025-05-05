@@ -3,5 +3,13 @@
         "rlgl.h": "c",
         "time.h": "c",
         "glfw3.h": "c"
-    }
+    },
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "lraylib",
+        "qcpilot",
+        "raylib",
+        "raymob",
+        "shott"
+    ]
 }

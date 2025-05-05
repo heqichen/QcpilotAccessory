@@ -1,4 +1,3 @@
-
 #ifndef QCPILOTCONSOLE_QCPILOT_ADAPTOR_H
 #define QCPILOTCONSOLE_QCPILOT_ADAPTOR_H
 
@@ -7,9 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-
 
 void readPacket();
 uint8_t *getBuffer();
