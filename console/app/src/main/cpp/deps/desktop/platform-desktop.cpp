@@ -4,9 +4,12 @@
 namespace qcpilot {
 namespace platform {
 
+static int v = 0;
+
 shott::ConsoleFrame fetchConsoleFrame() {
+    v += 10;
     shott::ConsoleFrame ret {};
-    ret.engineRpm = 123;
+    ret.engineRpm = v;
     return ret;
 }
 

@@ -1,6 +1,10 @@
 #ifndef __QCPILOT_UI_ENTRY_H__
 #define __QCPILOT_UI_ENTRY_H__
 
+#include "qcpilot/ui/layouts/absolute_layout.h"
+#include "qcpilot/ui/layouts/engine_rpm_bar.h"
+#include "qcpilot/ui/layouts/fitting_layout.h"
+#include "qcpilot/ui/layouts/horizontal_layout.h"
 #include "qcpilot/ui/layouts/layout.h"
 
 namespace qcpilot {
@@ -14,7 +18,9 @@ class Entry {
   private:
     void tick();
 
-    Layout mainLayout_;
+    FittingLayout mainLayout_;
+    AbsoluteLayout absoluteLayout_;
+    EngineRpmBar engineRpmBar_;
 };
 
 }    // namespace ui

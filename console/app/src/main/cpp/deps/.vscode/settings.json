@@ -54,7 +54,11 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "charconv": "cpp",
+        "complex": "cpp",
+        "ratio": "cpp",
+        "variant": "cpp"
     },
     "editor.formatOnSave": true,
     "cSpell.words": [
