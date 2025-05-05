@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "rlgl.h": "c",
+        "time.h": "c",
+        "glfw3.h": "c"
+    }
+}
