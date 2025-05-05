@@ -30,4 +30,7 @@ build/%.o: ../%.cpp
 clean:
 	rm -rf $(BUILD_DIR)
 
+run: build/desktop_app
+	./build/desktop_app
+
 .PHONY: desktop clean
