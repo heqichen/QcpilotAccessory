@@ -18,7 +18,7 @@ Entry::Entry(int width, int height) :
     SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
 
-    engineRpmText_.setBackgroundColor(RED);
+    // engineRpmText_.setBackgroundColor(RED);
     mainLayout_.setBackgroundColor(BLACK);
     mainLayout_.addChild(engineRpmBar_);
     mainLayout_.addChild(engineRpmText_);
