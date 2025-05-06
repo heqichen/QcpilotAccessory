@@ -73,6 +73,15 @@ class Layout {
                       canvasArea.h * viewportScale_,
                       color);
     }
+    virtual void textAlignRight(const char *text, std::size_t x, std::size_t y, std::size_t height, Color color) {
+        // Calculate the width of the text
+        int textWidth = MeasureText(text, height);
+        DrawText(text,
+                 screenViewport_.x + x * viewportScale_ - textWidth,
+                 screenViewport_.y * viewportScale_,
+                 height * viewportScale_,
+                 color);
+    }
 
     ScreenViewport screenViewport_ {0U, 0U, 0U, 0U};
     float viewportScale_ {1.0F};
