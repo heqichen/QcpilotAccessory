@@ -64,7 +64,9 @@
 			"charconv": "cpp",
 			"complex": "cpp",
 			"ratio": "cpp",
-			"variant": "cpp"
+			"variant": "cpp",
+			"list": "cpp",
+			"valarray": "cpp"
 		}
 	}
 }

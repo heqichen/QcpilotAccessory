@@ -8,9 +8,29 @@
 
 namespace qcpilot {
 namespace ui {
+
+struct ScreenViewport {
+    std::size_t x {0U};
+    std::size_t y {0U};
+    std::size_t w {0U};
+    std::size_t h {0U};
+};
+
+struct CanvasSize {
+    std::size_t w {0U};
+    std::size_t h {0U};
+};
+
+struct CanvasArea {
+    std::size_t x {0U};
+    std::size_t y {0U};
+    std::size_t w {0U};
+    std::size_t h {0U};
+};
+
+
 class Layout {
   public:
-    virtual void render(std::size_t x, std::size_t y, std::size_t w, std::size_t h, float scale) = 0;
     virtual void addChild(Layout &layout) {
         children_.push_back(&layout);
     }
@@ -20,23 +40,41 @@ class Layout {
         backgroundColor_ = color;
     }
 
+    virtual void renderAll(ScreenViewport screenViewport, float scale) {
+        computeViewport(screenViewport, scale);
+        drawBackground();
+
+        render();
+        drawChildren();
+    }
+
+    virtual void render() {};    // Let customer to implement this function
+
   protected:
+    virtual void computeViewport(ScreenViewport screenViewport, float scale) {
+        screenViewport_ = screenViewport;
+        viewportScale_ = scale;
+    }
     virtual void drawBackground() {
         if (hasBackgroundColor_) {
-            DrawRectangle(viewportX_, viewportY_, viewportW_, viewportH_, backgroundColor_);
+            DrawRectangle(screenViewport_.x, screenViewport_.y, screenViewport_.w, screenViewport_.h, backgroundColor_);
         }
     }
 
-    virtual void drawContent() {
+    virtual void drawChildren() {
         for (Layout *child : children_) {
-            child->render(viewportX_, viewportY_, viewportW_, viewportH_, viewportScale_);
+            child->renderAll(screenViewport_, viewportScale_);
         }
     }
+    virtual void rectangle(CanvasArea canvasArea, Color color) {
+        DrawRectangle(screenViewport_.x + (canvasArea.x * viewportScale_),
+                      screenViewport_.y + (canvasArea.y * viewportScale_),
+                      canvasArea.w * viewportScale_,
+                      canvasArea.h * viewportScale_,
+                      color);
+    }
 
-    std::size_t viewportX_ {0U};
-    std::size_t viewportY_ {0U};
-    std::size_t viewportW_ {0U};
-    std::size_t viewportH_ {0U};
+    ScreenViewport screenViewport_ {0U, 0U, 0U, 0U};
     float viewportScale_ {1.0F};
 
   private:

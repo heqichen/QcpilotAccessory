@@ -8,49 +8,39 @@
 
 namespace qcpilot {
 namespace ui {
+
+
 class FittingLayout : public Layout {
   public:
-    FittingLayout(std::size_t w, std::size_t h) : virtualWidth_ {w}, virtualHeight_ {h} {}
-
-    virtual void render(std::size_t x, std::size_t y, std::size_t w, std::size_t h, float scale) override {
-        canvasX_ = x;
-        canvasY_ = y;
-        canvasW_ = w;
-        canvasH_ = h;
-
-        computeViewport();
-        drawBackground();
-        drawContent();
-    }
+    explicit FittingLayout(CanvasSize canvasSize) : canvasSize_ {canvasSize} {}
 
 
   private:
-    std::size_t virtualWidth_ {0U};
-    std::size_t virtualHeight_ {0U};
+    const CanvasSize canvasSize_ {};
 
-    std::size_t canvasX_ {0U};
-    std::size_t canvasY_ {0U};
-    std::size_t canvasW_ {0U};
-    std::size_t canvasH_ {0U};
-
-
-    void computeViewport() {
+    virtual void computeViewport(ScreenViewport screenViewport, float scale) override {
         // Compute viewport
-        const float expectedRatio = static_cast<float>(virtualWidth_) / static_cast<float>(virtualHeight_);
-        const float canvasRatio = static_cast<float>(canvasW_) / static_cast<float>(canvasH_);
+        const float expectedRatio = static_cast<float>(canvasSize_.w) / static_cast<float>(canvasSize_.h);
+        const float screenRatio = static_cast<float>(screenViewport.w) / static_cast<float>(screenViewport.h);
 
-        if (canvasRatio > expectedRatio) {
-            viewportH_ = canvasH_;
-            viewportW_ = canvasH_ * expectedRatio;
-            viewportScale_ = static_cast<float>(canvasH_) / static_cast<float>(virtualHeight_);
-            viewportX_ = canvasX_ + ((canvasW_ - viewportW_) / 2);
-            viewportY_ = canvasY_;
+        if (screenRatio > expectedRatio) {
+            screenViewport_.w = static_cast<std::size_t>(screenViewport.h * expectedRatio);
+            screenViewport_.h = screenViewport.h;
+
+            screenViewport_.x = static_cast<std::size_t>((screenViewport.w - screenViewport_.w) / 2);
+            screenViewport_.y = screenViewport.y;
+
+            viewportScale_ = static_cast<float>(screenViewport.h) / static_cast<float>(canvasSize_.h);
+
+
         } else {
-            viewportW_ = canvasW_;
-            viewportH_ = canvasW_ / expectedRatio;
-            viewportScale_ = static_cast<float>(canvasW_) / static_cast<float>(virtualWidth_);
-            viewportX_ = canvasX_;
-            viewportY_ = canvasY_ + ((canvasH_ - viewportH_) / 2);
+            screenViewport_.w = screenViewport.w;
+            screenViewport_.h = static_cast<std::size_t>(screenViewport.h / expectedRatio);
+
+            screenViewport_.x = screenViewport.x;
+            screenViewport_.y = screenViewport.y + ((screenViewport.h - screenViewport_.h) / 2);
+
+            viewportScale_ = static_cast<float>(screenViewport.w) / static_cast<float>(canvasSize_.w);
         }
     }
 };

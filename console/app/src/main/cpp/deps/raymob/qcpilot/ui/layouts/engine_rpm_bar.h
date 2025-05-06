@@ -3,53 +3,25 @@
 
 #include <cstdint>
 #include <cstdio>
-#include "qcpilot/ui/layouts/layout.h"
+#include "qcpilot/ui/layouts/absolute_layout.h"
 #include "raylib.h"
 
 namespace qcpilot {
 namespace ui {
-class EngineRpmBar : public Layout {
+class EngineRpmBar : public AbsoluteLayout {
   public:
-    EngineRpmBar(std::size_t x, std::size_t y, std::size_t w, std::size_t h) :
-        virtualX_ {x},
-        virtualY_ {y},
-        virtualW_ {w},
-        virtualH_ {h} {}
-
-    virtual void render(std::size_t x, std::size_t y, std::size_t w, std::size_t h, float scale) override {
-        updateViewport(x, y, w, h, scale);
-        drawBackground();
-        drawBars();
-    }
+    EngineRpmBar(CanvasArea canvasArea) : AbsoluteLayout {canvasArea} {}
 
     void setRpm(std::uint32_t rpm) {
         rpm_ = rpm;
     }
 
   private:
-    std::size_t virtualX_ {0U};
-    std::size_t virtualY_ {0U};
-    std::size_t virtualW_ {0U};
-    std::size_t virtualH_ {0U};
-
-
     std::uint32_t rpm_ {0U};
-
-    void updateViewport(std::size_t x, std::size_t y, std::size_t w, std::size_t h, float scale) {
-        viewportX_ = static_cast<std::size_t>(x + (static_cast<float>(virtualX_) * scale));
-        viewportY_ = static_cast<std::size_t>(y + (static_cast<float>(virtualY_) * scale));
-        viewportW_ = static_cast<std::size_t>((static_cast<float>(virtualW_) * scale));
-        viewportH_ = static_cast<std::size_t>((static_cast<float>(virtualH_) * scale));
-        viewportScale_ = scale;
+    void render() override {
+        drawBars();
     }
 
-    void rectangle(std::size_t vx, std::size_t vy, std::size_t vw, std::size_t vh, Color color) {
-        DrawRectangle(viewportX_ + (vx * viewportScale_),
-                      viewportY_ + (vy * viewportScale_),
-                      vw * viewportScale_,
-                      vh * viewportScale_,
-                      color);
-    }
 
     void drawBars() {
         constexpr Color kDarkRed {CLITERAL(Color) {82, 5, 0, 255}};
@@ -62,9 +34,9 @@ class EngineRpmBar : public Layout {
         constexpr std::size_t barNums = 40;
         constexpr std::size_t borderWidth = 4;
 
-        const std::size_t barSpan = (virtualW_ - (padding * 2U) + borderWidth) / barNums;
+        const std::size_t barSpan = (canvasArea_.w - (padding * 2U) + borderWidth) / barNums;
         const std::size_t barWidth = barSpan - borderWidth;
-        const std::size_t barHeight = (virtualH_ - (padding * 2U));
+        const std::size_t barHeight = (canvasArea_.h - (padding * 2U));
 
         const std::size_t redZoneNum = static_cast<std::size_t>(barNums * 0.8F);
         std::size_t barValue = static_cast<std::size_t>((static_cast<float>(rpm_) / 8000.0) * barNums);
@@ -87,7 +59,7 @@ class EngineRpmBar : public Layout {
             }
 
 
-            rectangle(x, padding, barWidth, barHeight, color);
+            rectangle(CanvasArea {x, padding, barWidth, barHeight}, color);
         }
     }
 };
