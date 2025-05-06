@@ -3,6 +3,7 @@
 
 
 #include "qcpilot/ui/layouts/engine_rpm_bar.h"
+#include "qcpilot/ui/layouts/engine_rpm_text.h"
 #include "qcpilot/ui/layouts/fitting_layout.h"
 
 
@@ -19,6 +20,7 @@ class Entry {
 
     FittingLayout mainLayout_;
     EngineRpmBar engineRpmBar_;
+    EngineRpmText engineRpmText_;
 };
 
 }    // namespace ui

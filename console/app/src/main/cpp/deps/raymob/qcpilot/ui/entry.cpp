@@ -12,12 +12,16 @@ namespace ui {
 Entry::Entry(int width, int height) :
     mainLayout_ {ui::CanvasSize {975, 450}},    //
                                                 // absoluteLayout_ {0U, 0U, 600, 100},    //
-    engineRpmBar_ {ui::CanvasArea {0U, 0U, 600U, 100U}} {
+    engineRpmBar_ {ui::CanvasArea {0U, 0U, 600U, 100U}},
+    engineRpmText_ {ui::CanvasArea {600U, 0U, 200U, 100U}} {
     InitWindow(width, height, "raylib [core] example - basic window");
     SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
+
+    engineRpmText_.setBackgroundColor(RED);
     mainLayout_.setBackgroundColor(BLACK);
     mainLayout_.addChild(engineRpmBar_);
+    mainLayout_.addChild(engineRpmText_);
 }
 
 
@@ -41,6 +45,7 @@ void Entry::tick() {
 
     const qcpilot::shott::ConsoleFrame frame = qcpilot::platform::fetchConsoleFrame();
     engineRpmBar_.setRpm(frame.engineRpm);
+    engineRpmText_.setRpm(frame.engineRpm);
 
     // if (GuiButton((Rectangle) {200, 300, 200, 80}, "Button 2")) {
     //     const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();
