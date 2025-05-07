@@ -1,3 +1,4 @@
+#include <cmath>
 #include "raymob/qcpilot/data_def.h"
 #include "raymob/qcpilot/ui/platform.h"
 
@@ -20,6 +21,10 @@ shott::ConsoleFrame fetchConsoleFrame() {
 
     // ret.speedKph = 54.1F;
     ret.speedKph = speed[(count / 10) % (sizeof(speed) / sizeof(float))];
+
+    ret.ax = std::cos(static_cast<float>(count % 89) / 89.0 * 2 * 3.1415) * 0.3;
+    ret.ay = std::sin(static_cast<float>(count % 53) / 53.0 * 2 * 3.1415) * 0.3;
+
 
     return ret;
 }

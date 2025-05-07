@@ -6,6 +6,7 @@
 #include "qcpilot/ui/layouts/engine_rpm_text.h"
 #include "qcpilot/ui/layouts/fitting_layout.h"
 #include "qcpilot/ui/layouts/speed_text.h"
+#include "raymob/qcpilot/ui/layouts/acceleration.h"
 
 namespace qcpilot {
 namespace ui {
@@ -22,6 +23,7 @@ class Entry {
     EngineRpmBar engineRpmBar_;
     EngineRpmText engineRpmText_;
     SpeedText speedText_;
+    Acceleration acceleration_;
 };
 
 }    // namespace ui

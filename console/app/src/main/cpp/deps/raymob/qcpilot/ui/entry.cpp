@@ -14,16 +14,20 @@ Entry::Entry(int width, int height) :
                                                 // absoluteLayout_ {0U, 0U, 600, 100},    //
     engineRpmBar_ {ui::CanvasArea {0U, 0U, 600U, 100U}},
     engineRpmText_ {ui::CanvasArea {600U, 0U, 200U, 100U}},
-    speedText_ {ui::CanvasArea {75U, 125U, 375U, 225U}} {
+    speedText_ {ui::CanvasArea {75U, 125U, 375U, 225U}},
+    acceleration_ {ui::CanvasArea {550U, 125U, 225U, 225U}} {
     InitWindow(width, height, "raylib [core] example - basic window");
     SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
 
     // speedText_.setBackgroundColor(RED);
+    // acceleration_.setBackgroundColor(DARKBLUE);
+
     mainLayout_.setBackgroundColor(BLACK);
     mainLayout_.addChild(engineRpmBar_);
     mainLayout_.addChild(engineRpmText_);
     mainLayout_.addChild(speedText_);
+    mainLayout_.addChild(acceleration_);
 }
 
 
@@ -47,6 +51,7 @@ void Entry::tick() {
     engineRpmBar_.setRpm(frame.engineRpm);
     engineRpmText_.setRpm(frame.engineRpm);
     speedText_.setSpeed(frame.speedKph);
+    acceleration_.setAcceleration(frame.ax, frame.ay);
 
 
     mainLayout_.renderAll(
