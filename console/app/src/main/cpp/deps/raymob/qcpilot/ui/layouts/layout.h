@@ -75,6 +75,9 @@ class Layout {
     }
 
     virtual void textAlignRight(const char ch, std::size_t x, std::size_t y, std::size_t height, Color color) {
+        if (ch == '\0') {
+            return;
+        }
         char buffer[2] = {ch, '\0'};
         textAlignRight(buffer, x, y, height, color);
     }
