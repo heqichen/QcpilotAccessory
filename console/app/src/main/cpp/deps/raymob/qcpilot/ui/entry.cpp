@@ -40,12 +40,16 @@ void Entry::start() {
 void Entry::tick() {
     int screenHeight = GetScreenHeight();
     int screenWidth = GetScreenWidth();
-    mainLayout_.renderAll(
-      ui::ScreenViewport {0, 0, static_cast<std::size_t>(screenWidth), static_cast<std::size_t>(screenHeight)}, 1.0F);
 
     const qcpilot::shott::ConsoleFrame frame = qcpilot::platform::fetchConsoleFrame();
     engineRpmBar_.setRpm(frame.engineRpm);
     engineRpmText_.setRpm(frame.engineRpm);
+
+
+    mainLayout_.renderAll(
+      ui::ScreenViewport {0, 0, static_cast<std::size_t>(screenWidth), static_cast<std::size_t>(screenHeight)}, 1.0F);
+
+
 
     // if (GuiButton((Rectangle) {200, 300, 200, 80}, "Button 2")) {
     //     const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();

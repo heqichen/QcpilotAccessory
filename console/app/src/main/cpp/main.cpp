@@ -2,7 +2,7 @@
 
 
 int main(void) {
-    qcpilot::ui::Entry entry {2340, 1080};
+    qcpilot::ui::Entry entry {0, 0};
     entry.start();
     return 0;
 }

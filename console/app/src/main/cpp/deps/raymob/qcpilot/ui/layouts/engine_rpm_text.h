@@ -47,10 +47,7 @@ class EngineRpmText : public AbsoluteLayout {
             }
             exp++;
         }
-        // if ((exp == 0U) || rpm > 0) {
-        //     exp++;
-        // }
-        std::printf("exp:%lu, rpm:%lu\r\n", exp, rpm);
+
         const bool redzone = (rpm_ >= 6000U);
 
 

@@ -35,13 +35,25 @@ class FittingLayout : public Layout {
 
         } else {
             screenViewport_.w = screenViewport.w;
-            screenViewport_.h = static_cast<std::size_t>(screenViewport.h / expectedRatio);
+            screenViewport_.h = static_cast<std::size_t>(screenViewport.w / expectedRatio);
 
             screenViewport_.x = screenViewport.x;
             screenViewport_.y = screenViewport.y + ((screenViewport.h - screenViewport_.h) / 2);
 
             viewportScale_ = static_cast<float>(screenViewport.w) / static_cast<float>(canvasSize_.w);
         }
+    }
+
+    virtual void render() override {
+        DrawText(
+          TextFormat(
+            "x:%lu y:%lu w:%lu h:%lu", screenViewport_.x, screenViewport_.y, screenViewport_.w, screenViewport_.h),
+          // screenViewport_.w,
+          // screenViewport_.h - 25,
+          0,
+          0,
+          25,
+          WHITE);
     }
 };
 }    // namespace ui
