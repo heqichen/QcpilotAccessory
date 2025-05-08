@@ -90,11 +90,24 @@ class Layout {
                  color);
     }
 
-    void circle(std::size_t x, std::size_t y, std::size_t radius, Color color) {
+    virtual void circle(std::size_t x, std::size_t y, std::size_t radius, Color color) {
         DrawCircle((x * viewportScale_) + screenViewport_.x,
                    (y * viewportScale_) + screenViewport_.y,
                    radius * viewportScale_,
                    color);
+    }
+
+    virtual void text(const char *text, std::size_t x, std::size_t y, std::size_t height, Color color) {
+        std::printf("text: %s x:%d y:%d h:%d\r\n",
+                    text,
+                    (int)(screenViewport_.x + (x * viewportScale_)),
+                    (int)(screenViewport_.y + (y * viewportScale_)),
+                    (int)(height * viewportScale_));
+        DrawText(text,
+                 screenViewport_.x + (x * viewportScale_),
+                 screenViewport_.y + (y * viewportScale_),
+                 height * viewportScale_,
+                 color);
     }
 
     virtual void textAlignRight(const char ch, std::size_t x, std::size_t y, std::size_t height, Color color) {
@@ -139,6 +152,10 @@ class Layout {
             const std::size_t py = screenViewport_.y + (y * viewportScale_) - (textSize.y / 2);
             DrawText(text, px, py, fontSize, color);
         }
+    }
+
+    long map(long x, long in_min, long in_max, long out_min, long out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     ScreenViewport screenViewport_ {0U, 0U, 0U, 0U};

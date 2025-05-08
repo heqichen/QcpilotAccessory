@@ -2,11 +2,12 @@
 #define __QCPILOT_UI_ENTRY_H__
 
 
+#include "qcpilot/ui/layouts/acceleration.h"
 #include "qcpilot/ui/layouts/engine_rpm_bar.h"
 #include "qcpilot/ui/layouts/engine_rpm_text.h"
 #include "qcpilot/ui/layouts/fitting_layout.h"
+#include "qcpilot/ui/layouts/pedal.h"
 #include "qcpilot/ui/layouts/speed_text.h"
-#include "raymob/qcpilot/ui/layouts/acceleration.h"
 
 namespace qcpilot {
 namespace ui {
@@ -24,6 +25,8 @@ class Entry {
     EngineRpmText engineRpmText_;
     SpeedText speedText_;
     Acceleration acceleration_;
+    Pedal brakePedal_;
+    Pedal gasPedal_;
 };
 
 }    // namespace ui

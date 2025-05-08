@@ -25,6 +25,8 @@ shott::ConsoleFrame fetchConsoleFrame() {
     ret.ax = std::cos(static_cast<float>(count % 89) / 89.0 * 2 * 3.1415) * 0.3;
     ret.ay = std::sin(static_cast<float>(count % 53) / 53.0 * 2 * 3.1415) * 0.3;
 
+    ret.brake = (count / 1) % 255;
+    ret.gas = (count / 1) % 255;
 
     return ret;
 }

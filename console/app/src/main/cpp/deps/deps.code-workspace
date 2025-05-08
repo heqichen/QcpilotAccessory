@@ -67,6 +67,8 @@
 			"variant": "cpp",
 			"list": "cpp",
 			"valarray": "cpp"
-		}
+		},
+		"editor.rename.enablePreview": false,
+		"workbench.editor.enablePreview": false
 	}
 }
