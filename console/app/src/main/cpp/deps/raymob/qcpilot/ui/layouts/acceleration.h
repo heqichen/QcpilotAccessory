@@ -11,7 +11,7 @@
 namespace qcpilot {
 namespace ui {
 
-constexpr std::size_t kHistoryAccSize {120U};
+constexpr std::size_t kHistoryAccSize {60U};
 constexpr float kCircleGap {2.0F};
 constexpr float kOuterRing {0.9F};                  // 0.5G
 constexpr float kInnerRing {0.9F / 0.5F * 0.3F};    // 0.3G
@@ -66,10 +66,10 @@ class Acceleration : public AbsoluteLayout {
             const float x = cx + radius * kOuterRing / 0.5F * ax;
             const float y = cy + radius * kOuterRing / 0.5F * ay;
 
-            const unsigned char r = map(i, 0, kHistoryAccSize - 1, 230, 255);
-            const unsigned char g = map(i, 0, kHistoryAccSize - 1, 41, 128);
+            const unsigned char r = map(i, 0, kHistoryAccSize - 1, 230, 100);
+            const unsigned char g = map(i, 0, kHistoryAccSize - 1, 41, 64);
             const unsigned char b = map(i, 0, kHistoryAccSize - 1, 55, 0);
-            const unsigned char a = map(i, 0, kHistoryAccSize - 1, 255, 0);
+            const unsigned char a = map(i, 0, kHistoryAccSize - 1, 255, 90);
 
 
             circle(x, y, 5, Color {r, g, b, a});
