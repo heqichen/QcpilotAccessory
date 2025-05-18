@@ -14,7 +14,7 @@ class Pedal : public AbsoluteLayout {
         AbsoluteLayout {canvasArea},
         text_ {text},
         fillColor_ {fillColor} {}
-    void setValue(std::size_t value) {
+    void setValue(float value) {
         value_ = value;
     }
 
@@ -22,7 +22,7 @@ class Pedal : public AbsoluteLayout {
   private:
     const char *text_;
     const Color fillColor_;
-    std::size_t value_ {0U};
+    float value_ {0U};
     virtual void render() override {
         text(text_, 10, 5, 30, WHITE);
 
@@ -35,7 +35,7 @@ class Pedal : public AbsoluteLayout {
         rectangle({x - b, y - b, w + b * 2, h + b * 2}, WHITE);
         rectangle({x, y, w, h}, BLACK);
         // fill
-        const std::size_t fillWidth = map(value_, 0, 255, 0, w);
+        const std::size_t fillWidth = static_cast<std::size_t>(w * value_);
         rectangle({x, y, fillWidth, h}, fillColor_);
     }
 };

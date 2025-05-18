@@ -9,6 +9,11 @@
 namespace qcpilot {
 namespace ui {
 
+template<typename T>
+T map(T x, T in_min, T in_max, T out_min, T out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 struct ScreenViewport {
     std::size_t x {0U};
     std::size_t y {0U};
@@ -97,12 +102,14 @@ class Layout {
                    color);
     }
 
+    virtual void line(std::size_t x1, std::size_t y1, std::size_t x2, std::size_t y2, float thick, Color color) {
+        DrawLineEx({(x1 * viewportScale_) + screenViewport_.x, (y1 * viewportScale_) + screenViewport_.y},
+                   {(x2 * viewportScale_) + screenViewport_.x, (y2 * viewportScale_) + screenViewport_.y},
+                   thick * viewportScale_,
+                   color);
+    }
+
     virtual void text(const char *text, std::size_t x, std::size_t y, std::size_t height, Color color) {
-        std::printf("text: %s x:%d y:%d h:%d\r\n",
-                    text,
-                    (int)(screenViewport_.x + (x * viewportScale_)),
-                    (int)(screenViewport_.y + (y * viewportScale_)),
-                    (int)(height * viewportScale_));
         DrawText(text,
                  screenViewport_.x + (x * viewportScale_),
                  screenViewport_.y + (y * viewportScale_),
@@ -154,9 +161,6 @@ class Layout {
         }
     }
 
-    long map(long x, long in_min, long in_max, long out_min, long out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
 
     ScreenViewport screenViewport_ {0U, 0U, 0U, 0U};
     float viewportScale_ {1.0F};

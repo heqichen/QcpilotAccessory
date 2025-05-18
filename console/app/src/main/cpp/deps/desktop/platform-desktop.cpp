@@ -22,11 +22,13 @@ shott::ConsoleFrame fetchConsoleFrame() {
     // ret.speedKph = 54.1F;
     ret.speedKph = speed[(count / 10) % (sizeof(speed) / sizeof(float))];
 
-    ret.ax = std::cos(static_cast<float>(count % 89) / 89.0 * 2 * 3.1415) * 0.3;
-    ret.ay = std::sin(static_cast<float>(count % 53) / 53.0 * 2 * 3.1415) * 0.3;
+    ret.ax = std::cos(static_cast<float>(count % 89) / 89.0 * 2 * 3.1415) * 6;
+    // if (ret.ax < 0)
+    //     ret.ax = 0;
+    ret.ay = std::sin(static_cast<float>(count % 53) / 53.0 * 2 * 3.1415) * 1;
 
-    ret.brake = (count / 1) % 255;
-    ret.gas = (count / 1) % 255;
+    ret.brake = (float)((count / 1) % 256) / 256.0;
+    ret.gas = (float)((count / 1) % 256) / 256.0;
 
     return ret;
 }

@@ -16,6 +16,19 @@ constexpr float kCircleGap {2.0F};
 constexpr float kOuterRing {0.9F};                  // 0.5G
 constexpr float kInnerRing {0.9F / 0.5F * 0.3F};    // 0.3G
 
+namespace {
+Color mapColor(const std::size_t size, const std::size_t idx) {
+    // 230 41 55 255 -> 100 64 0 90
+    // 255 95 109 255 -> 255 195 113 90
+
+    const unsigned char r = map<std::size_t>(idx, 0, size - 1, 255, 255);
+    const unsigned char g = map<std::size_t>(idx, 0, size - 1, 95, 150);
+    const unsigned char b = map<std::size_t>(idx, 0, size - 1, 109, 113);
+    const unsigned char a = map<std::size_t>(idx, 0, size - 1, 130, 90);
+    return Color {r, g, b, a};
+}
+}    // namespace
+
 class Acceleration : public AbsoluteLayout {
   public:
     Acceleration(CanvasArea canvasArea) : AbsoluteLayout {canvasArea} {
@@ -49,28 +62,47 @@ class Acceleration : public AbsoluteLayout {
             historyAcc_[i][0] = historyAcc_[i - 1][0];
             historyAcc_[i][1] = historyAcc_[i - 1][1];
         }
-        historyAcc_[0][0] = ax_;
-        historyAcc_[0][1] = ay_;
-
+        constexpr float kAccMax {5.0F};
+        // constrain range to +=5.0G
+        historyAcc_[0][0] = std::min(std::max(ax_, -kAccMax), kAccMax);
+        historyAcc_[0][1] = std::min(std::max(ay_, -kAccMax), kAccMax);
+        std::printf("ax = %f\r\n", historyAcc_[0][0]);
 
         // 2. Draw
+        // Positive X toward down
+
         const std::size_t radius = std::min(canvasArea_.w, canvasArea_.h) / 2;
         const std::size_t cx = canvasArea_.w / 2;
         const std::size_t cy = canvasArea_.h / 2;
-        for (int i = kHistoryAccSize - 1; i >= 0; --i) {
-            const float ax = historyAcc_[i][0];
-            const float ay = historyAcc_[i][1];
-            const float x = cx + radius * kOuterRing / 0.5F * ax;
-            const float y = cy + radius * kOuterRing / 0.5F * ay;
+        const std::size_t lastIdx {kHistoryAccSize - 1U};
+        const float lastAx = historyAcc_[lastIdx][0] / 9.80665F;
+        float lastPy = cy + (radius * (kOuterRing / 0.5F) * lastAx);
+        const float lastAy = historyAcc_[lastIdx][1] / 9.80665F;
+        float lastPx = cx + (radius * kOuterRing / 0.5F * lastAy);
 
-            const unsigned char r = map(i, 0, kHistoryAccSize - 1, 230, 100);
-            const unsigned char g = map(i, 0, kHistoryAccSize - 1, 41, 64);
-            const unsigned char b = map(i, 0, kHistoryAccSize - 1, 55, 0);
-            const unsigned char a = map(i, 0, kHistoryAccSize - 1, 255, 90);
+        for (int i = kHistoryAccSize - 2U; i >= 0; --i) {
+            const float ax = historyAcc_[i][0] / 9.80665F;    // ACCEL TO G
+            const float py = cy + (radius * (kOuterRing / 0.5F) * ax);
+
+            const float ay = historyAcc_[i][1] / 9.80665F;    // ACCEL TO G
+            const float px = cx + (radius * kOuterRing / 0.5F * ay);
 
 
-            circle(x, y, 5, Color {r, g, b, a});
+            // circle(px, py, 5, mapColor(kHistoryAccSize, i));
+            line(px, py, lastPx, lastPy, 5.0F, mapColor(kHistoryAccSize, i));
+
+            lastPx = px;
+            lastPy = py;
         }
+
+        // Highlight the latest point
+        const std::size_t latestIdx {0U};
+        const float ax = historyAcc_[latestIdx][0] / 9.80665F;    // ACCEL TO G
+        const float py = cy + (radius * (kOuterRing / 0.5F) * ax);
+        const float ay = historyAcc_[latestIdx][1] / 9.80665F;    // ACCEL TO G
+        const float x = cx + (radius * kOuterRing / 0.5F * ay);
+        circle(x, py, 5, Color {255, 255, 255, 255});
+        circle(x, py, 3, Color {255, 0, 0, 255});
     }
 
     inline void drawGrid() {
