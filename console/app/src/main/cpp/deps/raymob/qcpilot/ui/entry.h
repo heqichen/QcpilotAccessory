@@ -6,12 +6,12 @@
 #include "qcpilot/ui/layouts/engine_rpm_bar.h"
 #include "qcpilot/ui/layouts/engine_rpm_text.h"
 #include "qcpilot/ui/layouts/fitting_layout.h"
+#include "qcpilot/ui/layouts/link_state.h"
 #include "qcpilot/ui/layouts/pedal.h"
 #include "qcpilot/ui/layouts/speed_text.h"
 
 namespace qcpilot {
 namespace ui {
-
 class Entry {
   public:
     Entry(int width, int height);
@@ -27,6 +27,7 @@ class Entry {
     Acceleration acceleration_;
     Pedal brakePedal_;
     Pedal gasPedal_;
+    LinkState linkState_;
 };
 
 }    // namespace ui

@@ -10,6 +10,7 @@ extern "C" {
 void readPacket();
 uint8_t *getBuffer();
 size_t  getBufferSize();
+uint64_t a_getLastReceivedElapsedMillis();
 
 #ifdef __cplusplus
 }

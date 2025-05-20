@@ -58,7 +58,8 @@
         "charconv": "cpp",
         "complex": "cpp",
         "ratio": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "chrono": "cpp"
     },
     "editor.formatOnSave": true,
     "cSpell.words": [

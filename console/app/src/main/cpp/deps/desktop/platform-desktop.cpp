@@ -1,4 +1,7 @@
+#include <chrono>
 #include <cmath>
+#include <cstdint>
+#include <cstdio>
 #include "raymob/qcpilot/data_def.h"
 #include "raymob/qcpilot/ui/platform.h"
 
@@ -31,6 +34,15 @@ shott::ConsoleFrame fetchConsoleFrame() {
     ret.gas = (float)((count / 1) % 256) / 256.0;
 
     return ret;
+}
+
+std::uint64_t getLastReceivedElapsedMillis() {
+    // const std::chrono::time_point<std::chrono::steady_clock> start =
+    //   std::chrono::time_point<std::chrono::steady_clock>::min();
+    // const std::chrono::time_point<std::chrono::steady_clock> end = std::chrono::steady_clock::now();
+    // std::printf("%lu\r\n", std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+
+    return 500;
 }
 
 }    // namespace platform

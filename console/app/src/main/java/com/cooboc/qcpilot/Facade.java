@@ -23,6 +23,10 @@ public class Facade {
         return toohs.recv();
     }
 
+    public long getLastReceivedElapsedMillis() {
+        return toohs.getLastReceivedElapsedMillis();
+    }
+
     private void mock() {
 
         try {

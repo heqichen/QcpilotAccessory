@@ -10,5 +10,9 @@ shott::ConsoleFrame fetchConsoleFrame() {
     const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();
     return frame;
 }
+
+std::uint64_t getLastReceivedElapsedMillis() {
+    return qcpilot::shott::getLastReceivedElapsedMillis();
+}
 }    // namespace platform
 }    // namespace qcpilot

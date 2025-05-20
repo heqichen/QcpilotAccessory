@@ -13,10 +13,11 @@ Entry::Entry(int width, int height) :
                                                 // absoluteLayout_ {0U, 0U, 600, 100},    //
     engineRpmBar_ {ui::CanvasArea {0U, 0U, 600U, 100U}},
     engineRpmText_ {ui::CanvasArea {600U, 0U, 200U, 100U}},
-    speedText_ {ui::CanvasArea {75U, 125U, 375U, 225U}},
-    acceleration_ {ui::CanvasArea {550U, 125U, 225U, 225U}},
-    brakePedal_ {"BRAKE", ui::CanvasArea {75U, 350U, 325U, 100U}, RED},
-    gasPedal_ {"THROTTLE", ui::CanvasArea {450U, 350U, 325U, 100U}, LIME} {
+    speedText_ {ui::CanvasArea {75U, 75U, 375U, 225U}},
+    acceleration_ {ui::CanvasArea {550U, 75U, 225U, 225U}},
+    brakePedal_ {"BRAKE", ui::CanvasArea {75U, 300U, 325U, 100U}, RED},
+    gasPedal_ {"THROTTLE", ui::CanvasArea {450U, 300U, 325U, 100U}, LIME},
+    linkState_ {ui::CanvasArea {50U, 400U, 50U, 50U}} {
     InitWindow(width, height, "raylib [core] example - basic window");
     SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
@@ -33,6 +34,7 @@ Entry::Entry(int width, int height) :
     mainLayout_.addChild(acceleration_);
     mainLayout_.addChild(brakePedal_);
     mainLayout_.addChild(gasPedal_);
+    mainLayout_.addChild(linkState_);
 }
 
 
@@ -59,10 +61,13 @@ void Entry::tick() {
     acceleration_.setAcceleration(frame.ax, frame.ay);
     brakePedal_.setValue(frame.brake);
     gasPedal_.setValue(frame.gas);
+    linkState_.setLastReceivedPacketElapsedMillis(qcpilot::platform::getLastReceivedElapsedMillis());
 
     mainLayout_.renderAll(
       ui::ScreenViewport {0, 0, static_cast<std::size_t>(screenWidth), static_cast<std::size_t>(screenHeight)}, 1.0F);
 
+
+    // DrawText(TextFormat("%lu", platform::getLastReceivedMillis()), 150, 50, 250, LIGHTGRAY);
 
     // if (GuiButton((Rectangle) {200, 300, 200, 80}, "Button 2")) {
     //     const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();

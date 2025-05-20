@@ -13,7 +13,7 @@ public class Toohs {
     private class Worker implements Runnable {
 
         private byte[] buffer_ = null;
-
+        private long lastReceivedMillis = 0L;
         public Worker() {
             this.buffer_ = new byte[0];
         }
@@ -49,6 +49,9 @@ public class Toohs {
                             for (int i=0; i< packet.getLength(); ++i) {
                                 this.buffer_[i] = buf[i];
                             }
+                            if (packet.getLength() == 23) {
+                                lastReceivedMillis = System.currentTimeMillis();
+                            }
                         }
                     } catch (Exception e) {
                         Log.e("QC", "Read socket error", e);
@@ -78,8 +81,11 @@ public class Toohs {
         t.start();
     }
 
-    public byte[] recv() {
+    public  byte[] recv() {
         return this.worker_.getPacket();
+    }
+    public  long getLastReceivedElapsedMillis() {
+        return (System.currentTimeMillis() - this.worker_.lastReceivedMillis);
     }
 
 

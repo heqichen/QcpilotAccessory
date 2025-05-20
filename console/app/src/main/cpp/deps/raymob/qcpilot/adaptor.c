@@ -4,12 +4,13 @@
 #include <string.h>
 #include <stdint.h>
 #include <android/log.h>
+#include <stdint.h>
 
 
 
 static char buffer[10240];
 static size_t bufferSize = 0U;
-
+static uint64_t lastReceivedElapsedTime = 0U;
 void readPacket() {
     jobject context = GetNativeLoaderInstance();
     if (context != NULL) {
@@ -22,21 +23,29 @@ void readPacket() {
 
         if (qcFacade != NULL) {
             jclass qcFacadeClass = (*env)->GetObjectClass(env, qcFacade);
-            jmethodID method = (*env)->GetMethodID(env, qcFacadeClass, "fun", "()[B");
-            jbyteArray keyBytes = (jbyteArray) (*env)->CallObjectMethod(env, qcFacade, method);
-            bufferSize = (*env)->GetArrayLength(env, keyBytes);
+            {
+                jmethodID method = (*env)->GetMethodID(env, qcFacadeClass, "fun", "()[B");
+                jbyteArray keyBytes = (jbyteArray) (*env)->CallObjectMethod(env, qcFacade, method);
+                bufferSize = (*env)->GetArrayLength(env, keyBytes);
 
-            // obtain the array elements
-            jbyte *elements = (*env)->GetByteArrayElements(env, keyBytes, NULL);
-            if (!elements) {
-                // handle JNI error ...
+                // obtain the array elements
+                jbyte *elements = (*env)->GetByteArrayElements(env, keyBytes, NULL);
+                if (!elements) {
+                    // handle JNI error ...
+                }
+                for (int i = 0; i < bufferSize; i++) {
+                    buffer[i] = elements[i];
+                }
+                // Do not forget to release the element array provided by JNI:
+                (*env)->ReleaseByteArrayElements(env, keyBytes, elements, JNI_ABORT);
             }
-            for (int i = 0; i < bufferSize; i++) {
-                buffer[i] = elements[i];
+            {
+                jmethodID timeMethod = (*env)->GetMethodID(env, qcFacadeClass, "getLastReceivedElapsedMillis", "()J");
+                jlong ret = (jlong)(*env)->CallLongMethod(env, qcFacade, timeMethod);
+                lastReceivedElapsedTime = ret;
             }
 
-            // Do not forget to release the element array provided by JNI:
-            (*env)->ReleaseByteArrayElements(env, keyBytes, elements, JNI_ABORT);
+
         }
 
         DetachCurrentThread();
@@ -49,4 +58,8 @@ uint8_t *getBuffer() {
 
 size_t  getBufferSize() {
     return bufferSize;
+}
+
+uint64_t a_getLastReceivedElapsedMillis() {
+    return lastReceivedElapsedTime;
 }
