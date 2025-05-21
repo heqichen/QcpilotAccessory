@@ -9,6 +9,8 @@
 #include "qcpilot/ui/layouts/link_state.h"
 #include "qcpilot/ui/layouts/pedal.h"
 #include "qcpilot/ui/layouts/speed_text.h"
+#include "raymob/qcpilot/ui/layouts/button.h"
+#include "raymob/qcpilot/ui/layouts/text_box.h"
 
 namespace qcpilot {
 namespace ui {
@@ -28,6 +30,8 @@ class Entry {
     Pedal brakePedal_;
     Pedal gasPedal_;
     LinkState linkState_;
+    TextBox textBox_;
+    Button testButton_;
 };
 
 }    // namespace ui

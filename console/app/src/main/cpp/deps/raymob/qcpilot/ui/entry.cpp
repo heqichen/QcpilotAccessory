@@ -6,6 +6,7 @@
 #include "qcpilot/ui/platform.h"
 #include "raylib.h"
 
+
 namespace qcpilot {
 namespace ui {
 Entry::Entry(int width, int height) :
@@ -17,7 +18,9 @@ Entry::Entry(int width, int height) :
     acceleration_ {ui::CanvasArea {550U, 75U, 225U, 225U}},
     brakePedal_ {"BRAKE", ui::CanvasArea {75U, 300U, 325U, 100U}, RED},
     gasPedal_ {"THROTTLE", ui::CanvasArea {450U, 300U, 325U, 100U}, LIME},
-    linkState_ {ui::CanvasArea {50U, 400U, 50U, 50U}} {
+    linkState_ {ui::CanvasArea {50U, 400U, 50U, 50U}},
+    textBox_ {ui::CanvasArea {120U, 400U, 400U, 50U}},
+    testButton_ {ui::CanvasArea {800U, 50U, 130U, 50U}} {
     InitWindow(width, height, "raylib [core] example - basic window");
     SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
@@ -35,6 +38,8 @@ Entry::Entry(int width, int height) :
     mainLayout_.addChild(brakePedal_);
     mainLayout_.addChild(gasPedal_);
     mainLayout_.addChild(linkState_);
+    mainLayout_.addChild(textBox_);
+    mainLayout_.addChild(testButton_);
 }
 
 
@@ -53,6 +58,8 @@ void Entry::start() {
 void Entry::tick() {
     int screenHeight = GetScreenHeight();
     int screenWidth = GetScreenWidth();
+    Vector2 touchPos {GetTouchPosition(0)};
+
 
     const qcpilot::shott::ConsoleFrame frame = qcpilot::platform::fetchConsoleFrame();
     engineRpmBar_.setRpm(frame.engineRpm);
@@ -62,6 +69,10 @@ void Entry::tick() {
     brakePedal_.setValue(frame.brake);
     gasPedal_.setValue(frame.gas);
     linkState_.setLastReceivedPacketElapsedMillis(qcpilot::platform::getLastReceivedElapsedMillis());
+    char buffer[256];
+    std::sprintf(buffer, "Touch [%d] %.2f, %.2f", GetTouchPointCount(), touchPos.x, touchPos.y);
+    textBox_.setText(buffer);
+
 
     mainLayout_.renderAll(
       ui::ScreenViewport {0, 0, static_cast<std::size_t>(screenWidth), static_cast<std::size_t>(screenHeight)}, 1.0F);

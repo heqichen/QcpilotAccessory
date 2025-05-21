@@ -66,7 +66,6 @@ class Acceleration : public AbsoluteLayout {
         // constrain range to +=5.0G
         historyAcc_[0][0] = std::min(std::max(ax_, -kAccMax), kAccMax);
         historyAcc_[0][1] = std::min(std::max(ay_, -kAccMax), kAccMax);
-        std::printf("ax = %f\r\n", historyAcc_[0][0]);
 
         // 2. Draw
         // Positive X toward down
