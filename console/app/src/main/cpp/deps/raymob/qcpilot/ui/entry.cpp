@@ -42,7 +42,7 @@ void Entry::start() {
     while (!WindowShouldClose()) {
         BeginDrawing();
 
-        ClearBackground(BROWN);
+        ClearBackground(BLACK);
         tick();
 
         EndDrawing();

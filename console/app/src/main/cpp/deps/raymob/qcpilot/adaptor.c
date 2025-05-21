@@ -53,7 +53,7 @@ void readPacket() {
 }
 
 uint8_t *getBuffer() {
-    return buffer;
+    return (uint8_t *)buffer;
 }
 
 size_t  getBufferSize() {
