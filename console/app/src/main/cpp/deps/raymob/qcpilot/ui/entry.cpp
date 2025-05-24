@@ -1,5 +1,6 @@
 #include "qcpilot/ui/entry.h"
 #include <cstdio>
+#include <vector>
 #include "qcpilot/ui/input/touch_manager.h"
 #include "qcpilot/ui/layouts/engine_rpm_bar.h"
 #include "qcpilot/ui/layouts/fitting_layout.h"
@@ -11,6 +12,10 @@
 
 namespace qcpilot {
 namespace ui {
+
+namespace {
+char infoText[256];
+}
 
 Entry::Entry(int width, int height) :
     touchManager_ {},
@@ -74,42 +79,39 @@ void Entry::tick() {
   int screenHeight = GetScreenHeight();
   int screenWidth = GetScreenWidth();
 
+  const qcpilot::shott::ConsoleFrame frame = qcpilot::platform::fetchConsoleFrame();
+  const std::uint64_t lastReceivedMillis = qcpilot::platform::getLastReceivedElapsedMillis();
+  const std::vector<qcpilot::platform::ui::KeyboardEvent> keyboardEvents = qcpilot::platform::fetchKeyboardEvents();
+
+  for (const auto &evt : keyboardEvents) {
+    std::sprintf(infoText,
+                 "Key[%d] %s",
+                 evt.keyCode,
+                 evt.type == qcpilot::platform::ui::KeyboardEvent::Type::KeyDown ? "down"
+                 : evt.type == qcpilot::platform::ui::KeyboardEvent::Type::KeyUp ? "up"
+                                                                                 : "repeat");
+  }
+
+
   touchManager_.tick();
   TouchManager::TouchEvent touchEvent = touchManager_.getTouchEvent();
   bool touchHandled = mainLayout_.handleTouchEvent(touchEvent);
 
-  const qcpilot::shott::ConsoleFrame frame = qcpilot::platform::fetchConsoleFrame();
+
   engineRpmBar_.setRpm(frame.engineRpm);
   engineRpmText_.setRpm(frame.engineRpm);
   speedText_.setSpeed(frame.speedKph);
   acceleration_.setAcceleration(frame.ax, frame.ay);
   brakePedal_.setValue(frame.brake);
   gasPedal_.setValue(frame.gas);
-  linkState_.setLastReceivedPacketElapsedMillis(qcpilot::platform::getLastReceivedElapsedMillis());
+  linkState_.setLastReceivedPacketElapsedMillis(lastReceivedMillis);
 
-  char buffer[256];
-  std::sprintf(buffer, "Touch handled: [%d]", touchHandled);
-  textBox_.setText(buffer);
+
+  textBox_.setText(infoText);
 
 
   mainLayout_.renderAll(
     ui::ScreenViewport {0, 0, static_cast<std::size_t>(screenWidth), static_cast<std::size_t>(screenHeight)}, 1.0F);
-
-
-  // DrawText(TextFormat("%lu", platform::getLastReceivedMillis()), 150, 50, 250, LIGHTGRAY);
-
-  // if (GuiButton((Rectangle) {200, 300, 200, 80}, "Button 2")) {
-  //     const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();
-  //     count = frame.engineRpm;
-  // }
-
-  // const shott::ConsoleFrame frame = platform::fetchConsoleFrame();
-  // // const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();
-  // int count = frame.engineRpm;
-
-  // char buffer[256];
-  // std::sprintf(buffer, "Screen size: %d x %d", screenWidth, screenHeight);
-  // DrawText(buffer, 190, 200, 80, LIGHTGRAY);
 }
 
 }    // namespace ui

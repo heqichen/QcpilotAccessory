@@ -15,8 +15,11 @@ namespace qcpilot {
         namespace {
 
             constexpr std::size_t kBufferSize{10240U};
+            std::uint8_t buffer[kBufferSize];
+            int intBuffer[kBufferSize];
+
             constexpr std::size_t kConsoleFramePackedSize{23U};
-            const std::uint8_t *buffer[kBufferSize];
+
 
             std::chrono::time_point<std::chrono::steady_clock> lastFrameReceivedTime =
                     std::chrono::time_point<std::chrono::steady_clock>::min();
@@ -50,42 +53,26 @@ namespace qcpilot {
             return static_cast<std::uint64_t>(duration.count());
         }
 
+        std::vector<ui::KeyboardEvent> fetchKeyboardEvents() {
+            std::size_t bufferReadSize{0U};
+            fetchKeyboardEventList(intBuffer, kBufferSize, &bufferReadSize);
+            std::vector<ui::KeyboardEvent> events;
+            if ((bufferReadSize % 2) == 0) {
+                for (std::size_t i = 0; i < bufferReadSize; i += 2) {
+                    ui::KeyboardEvent evt;
+                    evt.keyCode = intBuffer[i];
+                    if (intBuffer[i + 1] == 1) {
+                        evt.type = ui::KeyboardEvent::Type::KeyDown;
+                    } else {
+                        evt.type = ui::KeyboardEvent::Type::KeyUp;
+                    }
+                    events.push_back(evt);
+                }
+            } else {
+                // __android_log_print(ANDROID_LOG_ERROR, "QC", "keyboard event list size is not even: [%u]", bufferReadSize);
+            }
+            return events;
+        }
 
-// ConsoleFrame getConsoleFrame() {
-//   readPacket();
-//   ConsoleFrame frame {};
-//   const std::uint8_t *buffer = getBuffer();
-//   const std::uint32_t bufferSize = getBufferSize();
-
-
-//   if (bufferSize != 23U) {
-//     //                __android_log_print(ANDROID_LOG_ERROR, "QC", "buffer size incorrect: [%u]",
-//     //                                    bufferSize);
-//   } else {
-//     std::istringstream iss(std::string((char *)buffer, bufferSize), std::ios::binary);
-//     cereal::PortableBinaryInputArchive ar(iss);
-//     ar(frame);
-//   }
-//   return frame;
-// }
-
-// std::uint64_t getLastReceivedElapsedMillis() {
-//   return a_getLastReceivedElapsedMillis();
-// }
-
-    }    // namespace shott
+    }    // namespace platform
 }    // namespace qcpilot
-
-// namespace qcpilot {
-// namespace platform {
-
-// shott::ConsoleFrame fetchConsoleFrame() {
-//   const qcpilot::shott::ConsoleFrame frame = qcpilot::shott::getConsoleFrame();
-//   return frame;
-// }
-
-// std::uint64_t getLastReceivedElapsedMillis() {
-//   return qcpilot::shott::getLastReceivedElapsedMillis();
-// }
-// }    // namespace platform
-// }    // namespace qcpilot

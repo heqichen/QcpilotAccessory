@@ -23,11 +23,11 @@ public class Facade {
     }
 
     // keyAction 1 is down, 0 is up
-    public void insertKeyboardEvent(int keyCode, int keyAction){
+    public synchronized  void insertKeyboardEvent(int keyCode, int keyAction){
         keyboardEvents.add(keyCode);
         keyboardEvents.add(keyAction);
     }
-    public int[] fetchKeyboardEvents() {
+    public synchronized  int[] fetchKeyboardEvents() {
         int[] ret = new int[keyboardEvents.size()];
         for (int i = 0; i<keyboardEvents.size(); ++i ) {
             ret[i] = keyboardEvents.get(i);
