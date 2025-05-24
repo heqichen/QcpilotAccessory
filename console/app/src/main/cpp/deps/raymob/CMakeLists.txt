@@ -6,7 +6,7 @@ add_library(raymoblib STATIC
         display.c
         soft_keyboard.c
         callback.c
-        qcpilot/adaptor.c
+        qcpilot/jni_adaptor.c
         qcpilot/ui/entry.cpp
         qcpilot/ui/input/touch_manager.cpp
         qcpilot/ui/platform-android.cpp)

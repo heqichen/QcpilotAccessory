@@ -51,7 +51,6 @@ Entry::Entry(int width, int height) :
   mainLayout_.addChild(adasButton_);
   mainLayout_.addChild(adasIndicator_);
 
-
   meterButton_.setText("Sport");
   meterIndicator_.setEnabled(true);
   adasButton_.setText("ADAS");

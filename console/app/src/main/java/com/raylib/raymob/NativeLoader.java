@@ -31,8 +31,8 @@ import android.net.wifi.WifiManager.MulticastLock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.os.Bundle;
-import com.cooboc.qcpilot.Facade;
 
+import com.cooboc.qcpilot.Facade;
 
 
 public class NativeLoader extends NativeActivity {
@@ -49,8 +49,8 @@ public class NativeLoader extends NativeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /* Turn off multicast filter */
-        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
-        if (wifi != null){
+        WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        if (wifi != null) {
             WifiManager.MulticastLock lock = wifi.createMulticastLock("mylock");
             lock.setReferenceCounted(true);
             lock.acquire();
@@ -69,7 +69,7 @@ public class NativeLoader extends NativeActivity {
         softKeyboard = new SoftKeyboard(this);
 
         System.loadLibrary("raymob");   // Load your game library (don't change raymob, see gradle.properties)
-        
+
         facade = new Facade();
 
 
@@ -86,22 +86,25 @@ public class NativeLoader extends NativeActivity {
 
     // Callback methods for managing the Android software keyboard
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        // softKeyboard.onKeyUpEvent(event);
-        // return super.onKeyDown(keyCode, event);
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.e("QC", "key down: " + String.valueOf(keyCode));
+
+        facade.insertKeyboardEvent(keyCode, 1);
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        // softKeyboard.onKeyUpEvent(event);
+        // return super.onKeyDown(keyCode, event);
+        facade.insertKeyboardEvent(keyCode, 0);
+        return super.onKeyUp(keyCode, event);
+    }
+
+
+    @Override
     protected void onStart() {
         super.onStart();
-        if(initCallback) {
+        if (initCallback) {
             onAppStart();
         }
     }
@@ -109,7 +112,7 @@ public class NativeLoader extends NativeActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(initCallback) {
+        if (initCallback) {
             onAppResume();
         }
     }
@@ -117,7 +120,7 @@ public class NativeLoader extends NativeActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(initCallback) {
+        if (initCallback) {
             onAppPause();
         }
     }
@@ -125,14 +128,17 @@ public class NativeLoader extends NativeActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(initCallback){
+        if (initCallback) {
             onAppStop();
         }
     }
 
     private native void onAppStart();
+
     private native void onAppResume();
+
     private native void onAppPause();
+
     private native void onAppStop();
 
 }

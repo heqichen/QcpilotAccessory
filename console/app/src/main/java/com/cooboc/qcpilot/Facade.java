@@ -7,24 +7,37 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import android.util.Log;
 
 public class Facade {
     private Toohs toohs;
-    private int c = 0;
+    private ArrayList<Integer> keyboardEvents;
 
     public Facade() {
         toohs = new Toohs();
         toohs.init();
+        keyboardEvents = new ArrayList<>();
+        keyboardEvents.clear();
     }
 
-    public byte[] fun() {
-        return toohs.recv();
+    // keyAction 1 is down, 0 is up
+    public void insertKeyboardEvent(int keyCode, int keyAction){
+        keyboardEvents.add(keyCode);
+        keyboardEvents.add(keyAction);
+    }
+    public int[] fetchKeyboardEvents() {
+        int[] ret = new int[keyboardEvents.size()];
+        for (int i = 0; i<keyboardEvents.size(); ++i ) {
+            ret[i] = keyboardEvents.get(i);
+        }
+        keyboardEvents.clear();
+        return ret;
     }
 
-    public long getLastReceivedElapsedMillis() {
-        return toohs.getLastReceivedElapsedMillis();
+    public byte[] fetchPacket() {
+        return toohs.fetchPacket();
     }
 
     private void mock() {
@@ -35,15 +48,6 @@ public class Facade {
             Log.d("QC", "C: Connecting...");
             //create a socket to make the connection with the server
             Socket socket = new Socket(serverAddr, 1900);
-
-
-//            PrintWriter mBufferOut;
-//            //sends the message to the server
-//            mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-//            BufferedReader mBufferIn;
-//            //receives the message which the server sends back
-//            mBufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//
 
             byte[] buff = new byte[1024];
             int byteLen = -1;

@@ -11,9 +11,8 @@ import java.nio.charset.StandardCharsets;
 
 public class Toohs {
     private class Worker implements Runnable {
-
         private byte[] buffer_ = null;
-        private long lastReceivedMillis = 0L;
+
         public Worker() {
             this.buffer_ = new byte[0];
         }
@@ -46,11 +45,8 @@ public class Toohs {
                         synchronized (this) {
                             // copy data
                             this.buffer_ = new byte[packet.getLength()];
-                            for (int i=0; i< packet.getLength(); ++i) {
+                            for (int i = 0; i < packet.getLength(); ++i) {
                                 this.buffer_[i] = buf[i];
-                            }
-                            if (packet.getLength() == 23) {
-                                lastReceivedMillis = System.currentTimeMillis();
                             }
                         }
                     } catch (Exception e) {
@@ -60,10 +56,11 @@ public class Toohs {
             }
         }
 
-        public byte[] getPacket() {
+        public byte[] getAndClearPacket() {
             byte[] ret = null;
-            synchronized(this) {
+            synchronized (this) {
                 ret = this.buffer_;
+                this.buffer_ = new byte[0];
             }
             return ret;
 
@@ -71,26 +68,20 @@ public class Toohs {
     }
 
     private Worker worker_;
+
     public Toohs() {
         this.worker_ = new Worker();
     }
 
     public void init() {
-
         Thread t = new Thread(this.worker_);
         t.start();
     }
 
-    public  byte[] recv() {
-        return this.worker_.getPacket();
+    public byte[] fetchPacket() {
+        return this.worker_.getAndClearPacket();
     }
-    public  long getLastReceivedElapsedMillis() {
-        return (System.currentTimeMillis() - this.worker_.lastReceivedMillis);
-    }
-
 
     public void destroy() {
-
-
     }
 }
