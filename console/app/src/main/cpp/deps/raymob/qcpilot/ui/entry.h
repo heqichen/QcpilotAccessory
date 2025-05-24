@@ -39,6 +39,7 @@ private:
   Button adasButton_;
   Indicator meterIndicator_;
   Indicator adasIndicator_;
+  int panelState_ {0};
 };
 
 }    // namespace ui

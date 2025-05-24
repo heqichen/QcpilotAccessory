@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <functional>
 #include "qcpilot/ui/layouts/absolute_layout.h"
 #include "raylib.h"
 
@@ -20,6 +21,10 @@ constexpr Color kCastShadowColor {CLITERAL(Color) {0, 0, 0, 255}};
 constexpr Color kBackgroundColor {CLITERAL(Color) {134, 134, 134, 255}};
 std::uint32_t kButtonPushdownDuration {70U};    // ms
 
+const std::function<void(void)> dummyCallback = []() {
+  // Do nothing
+};
+
 }    // namespace
 
 class Button : public AbsoluteLayout {
@@ -27,9 +32,11 @@ public:
   Button(CanvasArea canvasArea) :
       AbsoluteLayout {canvasArea},
       isTouchDown_ {false},
-      pushDownAnimationStartTime_ {std::chrono::time_point<std::chrono::steady_clock>::min()} {
+      pushDownAnimationStartTime_ {std::chrono::time_point<std::chrono::steady_clock>::min()},
+      pushDownCallback_ {dummyCallback} {
     text_[0] = '\0';
   }
+  using PushDownCallback = std::function<void(void)>;
 
   void render() override {
     const std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
@@ -68,6 +75,7 @@ public:
     if (event == TouchManager::Event::DOWN) {
       isTouchDown_ = true;
       pushDownAnimationStartTime_ = std::chrono::steady_clock::now();
+      pushDownCallback_();
     } else {
       isTouchDown_ = false;
     }
@@ -79,11 +87,16 @@ public:
     text_[127] = '\0';
   }
 
+  virtual void setPushDownCallback(PushDownCallback callback) {
+    pushDownCallback_ = callback;
+  }
+
 private:
   bool isTouchDown_ {false};
   char text_[128];
 
   std::chrono::time_point<std::chrono::steady_clock> pushDownAnimationStartTime_;
+  PushDownCallback pushDownCallback_ {dummyCallback};
 };
 }    // namespace ui
 }    // namespace qcpilot

@@ -32,7 +32,8 @@ Entry::Entry(int width, int height) :
     meterButton_ {ui::CanvasArea {800U, 50U, 130U, 50U}},
     meterIndicator_ {ui::CanvasArea {940U, 50U, 7U, 50U}},
     adasButton_ {ui::CanvasArea {800U, 125U, 130U, 50U}},
-    adasIndicator_ {ui::CanvasArea {940U, 125U, 7U, 50U}} {
+    adasIndicator_ {ui::CanvasArea {940U, 125U, 7U, 50U}},
+    panelState_ {0} {
   InitWindow(width, height, "raylib [core] example - basic window");
   SetTargetFPS(60);    // Set our game to run at 60 frames-per-second
 
@@ -60,6 +61,15 @@ Entry::Entry(int width, int height) :
   meterIndicator_.setEnabled(true);
   adasButton_.setText("ADAS");
   adasIndicator_.setEnabled(false);
+
+  meterButton_.setPushDownCallback([this]() {
+    std::sprintf(infoText, "Meter button pushed down");
+    this->panelState_ = 0;
+  });
+  adasButton_.setPushDownCallback([this]() {
+    std::sprintf(infoText, "ADAS button pushed down");
+    this->panelState_ = 1;
+  });
 }
 
 
@@ -106,8 +116,9 @@ void Entry::tick() {
   gasPedal_.setValue(frame.gas);
   linkState_.setLastReceivedPacketElapsedMillis(lastReceivedMillis);
 
-
   textBox_.setText(infoText);
+  meterIndicator_.setEnabled(panelState_ == 0);
+  adasIndicator_.setEnabled(panelState_ == 1);
 
 
   mainLayout_.renderAll(
