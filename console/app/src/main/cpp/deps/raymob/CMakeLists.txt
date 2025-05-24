@@ -1,5 +1,15 @@
 # Define a library for raymoblib
-add_library(raymoblib STATIC helper.c sensor.c vibrator.c display.c soft_keyboard.c callback.c qcpilot/adaptor.c qcpilot/ui/entry.cpp qcpilot/ui/platform-android.cpp)
+add_library(raymoblib STATIC
+        helper.c
+        sensor.c
+        vibrator.c
+        display.c
+        soft_keyboard.c
+        callback.c
+        qcpilot/adaptor.c
+        qcpilot/ui/entry.cpp
+        qcpilot/ui/input/touch_manager.cpp
+        qcpilot/ui/platform-android.cpp)
 
 # Include headers directory for android_native_app_glue.c
 include_directories(${ANDROID_NDK}/sources/android/native_app_glue/ ${CMAKE_SOURCE_DIR}/deps/raymob)

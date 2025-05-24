@@ -26,8 +26,8 @@ namespace qcpilot {
 
 
             if (bufferSize != 23U) {
-                __android_log_print(ANDROID_LOG_ERROR, "QC", "buffer size incorrect: [%u]",
-                                    bufferSize);
+//                __android_log_print(ANDROID_LOG_ERROR, "QC", "buffer size incorrect: [%u]",
+//                                    bufferSize);
             } else {
                 std::istringstream iss(std::string((char *)buffer, bufferSize), std::ios::binary);
                 cereal::PortableBinaryInputArchive ar(iss);

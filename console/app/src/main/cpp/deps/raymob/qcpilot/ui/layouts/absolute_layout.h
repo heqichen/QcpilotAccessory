@@ -11,6 +11,12 @@ namespace ui {
 class AbsoluteLayout : public Layout {
   public:
     AbsoluteLayout(CanvasArea canvasArea) : canvasArea_ {canvasArea} {}
+    virtual CanvasPosition convert(float screenX, float screenY) override {
+        CanvasPosition canvasPos;
+        canvasPos.x = static_cast<std::size_t>((screenX - screenViewport_.x) / viewportScale_);
+        canvasPos.y = static_cast<std::size_t>((screenY - screenViewport_.y) / viewportScale_);
+        return canvasPos;
+    }
 
   protected:
     const CanvasArea canvasArea_ {};

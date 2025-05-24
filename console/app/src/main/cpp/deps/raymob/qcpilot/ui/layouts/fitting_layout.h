@@ -45,15 +45,15 @@ class FittingLayout : public Layout {
     }
 
     virtual void render() override {
-        DrawText(
-          TextFormat(
-            "x:%lu y:%lu w:%lu h:%lu", screenViewport_.x, screenViewport_.y, screenViewport_.w, screenViewport_.h),
-          // screenViewport_.w,
-          // screenViewport_.h - 25,
-          0,
-          0,
-          25,
-          WHITE);
+        // DrawText(
+        //   TextFormat(
+        //     "x:%lu y:%lu w:%lu h:%lu", screenViewport_.x, screenViewport_.y, screenViewport_.w, screenViewport_.h),
+        //   // screenViewport_.w,
+        //   // screenViewport_.h - 25,
+        //   0,
+        //   0,
+        //   25,
+        //   WHITE);
     }
 };
 }    // namespace ui

@@ -29,7 +29,7 @@ Cpp11BracedListStyle: 'true'
 FixNamespaceComments: 'true'
 IncludeBlocks: Merge
 IndentCaseLabels: 'true'
-IndentWidth: '4'
+IndentWidth: '2'
 IndentWrappedFunctionNames: 'true'
 Language: Cpp
 MaxEmptyLinesToKeep: '2'

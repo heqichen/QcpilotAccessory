@@ -3,6 +3,7 @@ BUILD_DIR := build
 
 
 SRCS := raymob/qcpilot/ui/entry.cpp
+SRCS += raymob/qcpilot/ui/input/touch_manager.cpp
 
 OBJS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SRCS))))
 
